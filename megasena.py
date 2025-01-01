@@ -1,3 +1,5 @@
+"""Código feito pelo Gemini"""
+
 def comparar_apostas(numeros_sorteados, apostas):
   """Compara as apostas com os números sorteados e retorna o número de acertos de cada aposta."""
   resultados = []
