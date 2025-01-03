@@ -1,94 +1,117 @@
-import random
+def gerar_plano_exercicios(dias_treino, tempo_treino, objetivo, nivel, preferencias, restricoes):
+    """
+    Gera um plano de exercícios mensal, considerando os dias de treino, tempo disponível, objetivo, nível de condicionamento físico, preferências e restricoes do usuário.
 
-def gerar_exercicios(dias_academia, idade, altura, peso):
-  """
-  Gera uma série de exercícios sem impacto de acordo com os dias na academia, 
-  idade, altura e peso do usuário.
+    Args:
+        dias_treino: Dias disponíveis para treinar por semana.
+        tempo_treino: Tempo disponível para treinar por dia (em minutos).
+        objetivo: Objetivo do treino (emagrecer, ganhar massa muscular, manter a forma, etc.).
+        nivel: Nível de condicionamento físico atual (iniciante, intermediário, avançado).
+        preferencias: Preferências de exercícios (quais tipos de exercícios gosta ou não gosta).
+        restricoes: Alguma restrição médica ou lesão que impeça a realização de certos exercícios.
 
-  Args:
-    dias_academia: Número de dias por semana que o usuário vai à academia.
-    idade: Idade do usuário em anos.
-    altura: Altura do usuário em centímetros.
-    peso: Peso do usuário em kg.
+    Returns:
+        Um plano de exercícios mensal.
+    """
 
-  Returns:
-    Uma lista de exercícios.
-  """
+    plano = {}
+    exercicios = {
+        "pernas": {
+            "iniciante": ["Agachamentos", "Lunges", "Elevação de panturrilha"],
+            "intermediario": ["Agachamentos búlgaros", "Lunges com salto", "Agachamento pistol"],
+            "avancado": ["Agachamento pistol", "Lunges com salto e peso", "Saltos em caixa"]
+        },
+        "costas": {
+            "iniciante": ["Flexões de braço", "Prancha", "Superman"],
+            "intermediario": ["Flexões de braço inclinadas", "Prancha com elevação de perna", "Remada invertida"],
+            "avancado": ["Flexões de braço com uma mão", "Prancha com elevação de perna e braço", "Muscle-up"]
+        },
+        "peito": {
+            "iniciante": ["Flexões de braço", "Flexões de braço inclinadas"],
+            "intermediario": ["Flexões de braço declinadas", "Flexões de braço explosivas"],
+            "avancado": ["Flexões de braço com uma mão", "Flexões de braço pliométricas"]
+        },
+        "ombros": {
+            "iniciante": ["Flexões de braço", "Elevações laterais com garrafa de água", "Rotações de ombro"],
+            "intermediario": ["Flexões de braço pike", "Elevações frontais com garrafa de água", "Crucifixo invertido"],
+            "avancado": ["Parada de mão", "Flexões de braço hindu", "Elevações laterais com isometria"]
+        },
+        "braços": {
+            "iniciante": ["Flexões de braço", "Mergulhos em cadeira", "Rosca direta com garrafa de água"],
+            "intermediario": ["Flexões de braço diamante", "Mergulhos em cadeira com elevação de perna", "Rosca concentrada com garrafa de água"],
+            "avancado": ["Flexões de braço fechadas", "Mergulhos em barra", "Rosca martelo com garrafa de água"]
+        },
+        "abdomen": {
+            "iniciante": ["Prancha", "Abdominais tradicionais", "Elevação de pernas"],
+            "intermediario": ["Prancha lateral", "Abdominais bicicleta", "Elevação de pernas com joelhos flexionados"],
+            "avancado": ["Prancha com elevação de perna e braço", "Abdominais dragon flag", "Elevação de pernas tesoura"]
+        }
+    }
 
-  exercicios = []
+    # Define a ordem dos treinos para cada dia da semana, garantindo pelo menos um dia de descanso entre os treinos de cada grupo muscular
+    ordem_treinos = ["pernas", "costas", "peito", "ombros", "braços", "abdomen"]
 
-  # Exercícios de aquecimento (5 minutos)
-  exercicios.append("Aquecimento:")
-  exercicios.append("- Caminhada leve (5 minutos)")
+    # Ajusta o número de séries e repetições de acordo com o nível de condicionamento físico
+    series = {"iniciante": 2, "intermediario": 3, "avancado": 4}
+    repeticoes = {"iniciante": 10, "intermediario": 12, "avancado": 15}
 
-  # Exercícios principais (variam com base nos dias na academia)
-  exercicios.append("\nExercícios principais:")
-  if dias_academia >= 3:
-    exercicios.extend([
-        "- Agachamento na parede (3 séries de 10-12 repetições)",
-        "- Flexões de braço na parede (3 séries de 10-12 repetições)",
-        "- Prancha (3 séries de 30-60 segundos)",
-        "- Elevação de panturrilhas (3 séries de 15-20 repetições)",
-        "- Bicicleta ergométrica (20-30 minutos em ritmo moderado)"
-    ])
-  else:
-    exercicios.extend([
-        "- Agachamento na parede (2 séries de 10 repetições)",
-        "- Prancha (2 séries de 30 segundos)",
-        "- Caminhada (30 minutos em ritmo moderado)"
-    ])
+    # Gera o plano de exercícios para cada dia da semana
+    for i in range(dias_treino):
+        dia = i + 1
+        grupo_muscular = ordem_treinos[i % len(ordem_treinos)]
+        plano[f"Dia {dia}"] = []
 
-  # Exercícios de alongamento (5 minutos)
-  exercicios.append("\nAlongamento:")
-  exercicios.extend([
-      "- Alongamento de panturrilhas",
-      "- Alongamento de isquiotibiais",
-      "- Alongamento de quadríceps",
-      "- Alongamento de peitoral",
-      "- Alongamento de costas"
-  ])
+        # Adiciona exercícios para o grupo muscular do dia
+        for exercicio in exercicios[grupo_muscular][nivel]:
+            plano[f"Dia {dia}"].append(f"{exercicio} ({series[nivel]} séries de {repeticoes[nivel]} repetições)")
 
-  # Ajustes com base na idade
-  if idade >= 65:
-    exercicios.append("\nObservações:")
-    exercicios.append(
-        "- Se você tiver alguma condição médica pré-existente, consulte um médico antes de iniciar qualquer novo programa de exercícios."
-    )
-    exercicios.append(
-        "- Comece devagar e aumente gradualmente a intensidade e duração dos exercícios."
-    )
-    exercicios.append("- Use roupas e calçados confortáveis.")
-    exercicios.append("- Beba bastante água antes, durante e depois dos exercícios.")
-    exercicios.append("- Pare imediatamente se sentir dor.")
+        # Adiciona exercícios para outros grupos musculares, se houver tempo disponível
+        if tempo_treino >= 45 and objetivo == "ganhar massa muscular":
+            # Adiciona exercícios para um segundo grupo muscular no mesmo dia
+            grupo_muscular_secundario = ordem_treinos[(i + 3) % len(ordem_treinos)]  # Seleciona um grupo muscular diferente do principal
+            for exercicio in exercicios[grupo_muscular_secundario][nivel]:
+                plano[f"Dia {dia}"].append(f"{exercicio} ({series[nivel]} séries de {repeticoes[nivel]} repetições)")
 
-  return exercicios
+    # Cria um plano mensal repetindo o plano semanal
+    plano_mensal = {}
+    for semana in range(4):  # 4 semanas em um mês
+        for dia, exercicios in plano.items():
+            plano_mensal[f"Semana {semana+1}, {dia}"] = exercicios
 
+    return plano_mensal
 
-def salvar_exercicios(exercicios, nome_arquivo="exercicios.txt"):
-  """
-  Salva a lista de exercícios em um arquivo.
+def salvar_plano_exercicios(plano, nome_arquivo="plano_exercicios.txt"):
+    """
+    Salva o plano de exercícios em um arquivo txt.
 
-  Args:
-    exercicios: Lista de exercícios.
-    nome_arquivo: Nome do arquivo onde os exercícios serão salvos.
-  """
+    Args:
+        plano: Dicionário contendo o plano de exercícios.
+        nome_arquivo: Nome do arquivo onde o plano será salvo.
+    """
 
-  with open(nome_arquivo, "w") as f:
-    for exercicio in exercicios:
-      f.write(exercicio + "\n")
-
+    with open(nome_arquivo, "w") as f:
+        for dia, exercicios in plano.items():
+            f.write(f"{dia}:\n")
+            for exercicio in exercicios:
+                f.write(f"- {exercicio}\n")
+            f.write("\n")
 
 if __name__ == "__main__":
-  dias_academia = int(input("Quantos dias por semana você irá à academia? "))
-  idade = int(input("Qual a sua idade? "))
-  altura = float(input("Qual a sua altura em centímetros? "))
-  peso = float(input("Qual o seu peso em kg? "))
+    dias_treino = int(input("Quantos dias por semana você pode treinar? "))
+    tempo_treino = int(input("Quanto tempo você tem disponível para treinar por dia (em minutos)? "))
+    objetivo = input("Qual o seu objetivo com o treino (emagrecer, ganhar massa muscular, manter a forma, etc.)? ")
+    nivel = input("Qual o seu nível de condicionamento físico (iniciante, intermediário, avançado)? ")
+    preferencias = input("Você tem alguma preferência por tipos de exercícios (ex: prefere exercícios para membros superiores)? ")
+    restricoes = input("Você tem alguma restrição médica ou lesão? ")
 
-  exercicios = gerar_exercicios(dias_academia, idade, altura, peso)
+    plano_exercicios = gerar_plano_exercicios(dias_treino, tempo_treino, objetivo, nivel, preferencias, restricoes)
 
-  print("\nSua série de exercícios:")
-  for exercicio in exercicios:
-    print(exercicio)
+    print("\nSeu plano de exercícios:")
+    for dia, exercicios in plano_exercicios.items():
+        print(f"{dia}:")
+        for exercicio in exercicios:
+            print(f"- {exercicio}")
+        print()
 
-  salvar_exercicios(exercicios)
-  print("\nExercícios salvos em 'exercicios.txt'")
+    salvar_plano_exercicios(plano_exercicios)
+    print("Plano de exercícios salvo em 'plano_exercicios.txt'")
